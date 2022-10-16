@@ -80,6 +80,19 @@ const waitForReadiness = (url, MAX_TIMEOUT) => {
 };
 
 const waitForUrl = async (url, MAX_TIMEOUT) => {
+  axios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        return Promise.resolve(error.response);
+      } else {
+        return Promise.reject(error);
+      }
+    }
+  );
+
   const iterations = MAX_TIMEOUT / 3;
   for (let i = 0; i < iterations; i++) {
     try {
