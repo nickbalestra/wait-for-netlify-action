@@ -37,13 +37,12 @@ Basic Usage
 ```yaml
 steps:
   - name: Wait for Netlify Deploy
-    uses: probablyup/wait-for-netlify-action@3.2.0
+    uses: nickbalestra/wait-for-netlify-action@1.0.0
     id: waitForDeployment
     with:
-      site_id: 'YOUR_SITE_ID' # See Settings > Site Details > General in the Netlify UI
+      site_id: "YOUR_SITE_ID" # See Settings > Site Details > General in the Netlify UI
     env:
       NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
-      
 # Then use it in a later step like:
 # ${{ steps.waitForDeployment.outputs.url }}
 ```
@@ -69,10 +68,10 @@ jobs:
           run: npm ci
 
         - name: Wait for Netlify
-          uses: probablyup/wait-for-netlify-action@3.2.0
+          uses: nickbalestra/wait-for-netlify-action@1.0.0
           id: waitForDeployment
           with:
-            site_id: '[your site ID here]'
+            site_id: "[your site ID here]"
           env:
             NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
 
@@ -116,10 +115,10 @@ jobs:
         run: |
           npm run build
       - name: Waiting for 200 from Netlify
-        uses: probablyup/wait-for-netlify-action@3.2.0
+        uses: nickbalestra/wait-for-netlify-action@1.0.0
         id: waitForNetlifyDeploy
         with:
-          site_id: 'YOUR_SITE_ID' # See Settings > Site Details > General in the Netlify UI
+          site_id: "YOUR_SITE_ID" # See Settings > Site Details > General in the Netlify UI
         env:
           NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
       - name: Lighthouse CI
