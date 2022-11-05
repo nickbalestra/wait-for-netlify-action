@@ -149,10 +149,13 @@ const run = async () => {
       if (matcher.test(commitDeployment.error_message)) {
         url = commitDeployment.deploy_ssl_url;
         try {
-          // if previous deployment for branch exist, no need for multiple retry
+          // if previous deployment for branch exist, no need for multiple retry as it should be already up
           const checkOnlyOnce = true;
           await waitForUrl(url, 3, checkOnlyOnce);
         } catch (e) {
+          core.info(
+            `No deployment available: ${commitDeployment.error_message}`
+          );
           core.setOutput("nopreview", 1);
           return;
         }
