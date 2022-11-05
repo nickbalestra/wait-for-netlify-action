@@ -79,7 +79,7 @@ const waitForReadiness = (url, MAX_TIMEOUT) => {
   });
 };
 
-const waitForUrl = async (url, MAX_TIMEOUT) => {
+const waitForUrl = async (url, MAX_TIMEOUT, flag) => {
   axios.interceptors.response.use(
     (response) => {
       return response;
@@ -102,6 +102,9 @@ const waitForUrl = async (url, MAX_TIMEOUT) => {
       console.log(`URL ${url} unavailable, retrying...`);
       await new Promise((r) => setTimeout(r, 3000));
     }
+  }
+  if (flag) {
+    return;
   }
   core.setFailed(`Timeout reached: Unable to connect to ${url}`);
 };
@@ -145,6 +148,14 @@ const run = async () => {
       const matcher = new RegExp(/canceled build due to no content change/i);
       if (matcher.test(commitDeployment.error_message)) {
         url = commitDeployment.deploy_ssl_url;
+        try {
+          // if previous deployment for branch exist, no need for multiple retry
+          const checkOnlyOnce = true;
+          await waitForUrl(url, 3, checkOnlyOnce);
+        } catch (e) {
+          core.setOutput("nopreview", 1);
+          return;
+        }
       } else {
         throw new Error(commitDeployment.error_message);
       }
