@@ -153,6 +153,7 @@ const run = async () => {
           const checkOnlyOnce = true;
           await waitForUrl(url, 3, checkOnlyOnce);
         } catch (e) {
+          core.notice("Skipping: no deployment available for this branch");
           core.info(
             `No deployment available: ${commitDeployment.error_message}`
           );
