@@ -99,12 +99,12 @@ const waitForUrl = async (url, MAX_TIMEOUT, flag) => {
       await axios.get(url);
       return;
     } catch (e) {
+      if (flag) {
+        return Promise.reject("not found");
+      }
       console.log(`URL ${url} unavailable, retrying...`);
       await new Promise((r) => setTimeout(r, 3000));
     }
-  }
-  if (flag) {
-    return;
   }
   core.setFailed(`Timeout reached: Unable to connect to ${url}`);
 };
